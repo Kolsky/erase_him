@@ -41,7 +41,7 @@ async fn main_hook() -> Result<()> {
     let mut long_poll_server_iter = s_info.get_long_poll_server(false, 0, 2).await?.into_async_iter(&s_info);
     while let Some(updates) = long_poll_server_iter.next().await {
         let messages = updates.into_iter()
-        .filter(|v| v.len() > 6 && v[0] == 4 && v[3].as_u64().iter().any(|&x| x < 2_000_000_000).not())
+        .filter(|v| v.len() > 6 && v[0] == 4 && v[3].as_u64().iter().any(|&x| x >= 2_000_000_000))
         .filter_map(|update| {
             match update[6].as_object()
             .and_then(|obj| obj.get("from"))
